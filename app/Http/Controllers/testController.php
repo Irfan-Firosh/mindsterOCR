@@ -16,7 +16,7 @@ class testController extends Controller
             if ($entry != '..' && $entry != '.') {
                 $path = $dir . '/' . $entry;
                 // Check if file has 'title' keyword in it
-                if (substr_count($entry, 'title') > 0) {
+                /* if (substr_count($entry, 'title') > 0) {
                     $ocr->image($path)->lang('eng')->allowlist(range('A', 'Z'), range('a', 'z'), ' ', '\n');
                     $text = $ocr->run();
                     $ret['text'] = $text;
@@ -36,10 +36,19 @@ class testController extends Controller
                     $desc = $ocr->run();
                     $ret['price'] = $desc;
                     continue;
-                }
+                } */
+
+                $ocr->image($path)->lang('eng')->allowlist(range('A', 'Z'), range('a', 'z'), ' ', '\n');
+                $text = $ocr->run();
+
+                $ocr->image($path)->lang('eng')->allowlist(range(0, 9), '.');
+                $num = $ocr->run();
+
+                return ['text' => $text, 'price' => $num];
+
             }
         }
-        
+
         return $ret;
     }
 }
