@@ -32,19 +32,7 @@ class testController extends Controller
 
         $path = $file->storeAs('uploads', $customName, 'public');
 
-        return "File Uploaded At: " . $path;
-    }
-
-    public function crop() {
-        $im = imagecreatefrompng( "/Applications/XAMPP/xamppfiles/htdocs/ocr/public/imgs/price0.png");
-        $size = min(imagesx($im), imagesy($im));
-
-        $im2 = imagecrop($im, ['x' => 635, 'y' => 569, 'width' => $size/2, 'height' => $size/4]); 
-        if ($im2 !== FALSE) {  
-            imagepng($im2, 'cropped/example.png'); 
-            imagedestroy($im2); 
-        } 
-        imagedestroy($im);
+        return redirect()->route('home');
     }
 
     public function index() {
@@ -57,7 +45,7 @@ class testController extends Controller
             if ($entry != '..' && $entry != '.') {
                 $path = $dir . '/' . $entry;
                 // Check if file has 'title' keyword in it
-                if (substr_count($entry, 'title') > 0) {
+                if (substr_count($entry, 'title_') > 0) {
                     try {
                         $ocr->image($path)->lang('eng')->allowlist(range('A', 'Z'), range('a', 'z'), ' ', '\n');
                         $text = $ocr->run();
@@ -68,7 +56,7 @@ class testController extends Controller
                     continue;
                 }
                 // Check if file has 'price' keyword in it
-                if (substr_count($entry, 'price') > 0) {
+                if (substr_count($entry, 'price_') > 0) {
                     try {
                         $ocr->image($path)->lang('eng')->allowlist(range(0, 9), '.');
                         $price = $ocr->run();
@@ -80,7 +68,7 @@ class testController extends Controller
                 }
 
                 // Check if file has 'desc' keyword in it
-                if (substr_count($entry, 'desc') > 0) {
+                if (substr_count($entry, 'desc_') > 0) {
                     try {
                         $ocr->image($path)->lang('eng');
                         $desc = $ocr->run();

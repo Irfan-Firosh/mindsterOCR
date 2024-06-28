@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\testController;
+use Faker\Guesser\Name;
 use Illuminate\Support\Facades\Route;
 use Nette\Utils\Json;
 
@@ -18,4 +19,4 @@ use Nette\Utils\Json;
 
 Route::post('/upload', [testController::class, 'upload'])->name('upload');
 
-Route::get('/', [testController::class, 'index']);
+Route::get('/', [testController::class, 'index'])->name('home');
