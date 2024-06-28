@@ -15,13 +15,7 @@ use Nette\Utils\Json;
 |
 */
 
-Route::get('/info', function() {
-    $ch = curl_init();
-    $url = "https://reqres.in/api/users?page=2";
-    curl_setopt($ch, CURLOPT_URL, $url);
-    $resp = curl_exec($ch);
-    curl_close($ch);
-    return json_decode($resp);
-});
+
+Route::post('/upload', [testController::class, 'upload'])->name('upload');
 
 Route::get('/', [testController::class, 'index']);
