@@ -41,6 +41,7 @@ class testController extends Controller
         $ocr = new TesseractOCRTesseractOCR();
         $ret = ['title' => 'Nothing Seleted', 'price' => 'Nothing Selected', 'desc' => 'Nothing Selected'];
         $text = null;
+        $fileOut = fopen('/Applications/XAMPP/xamppfiles/htdocs/ocr/storage/app/public/outputs/output.txt', 'a') or die("Unable to open file");
         foreach ($entries as $entry) {
             if ($entry != '..' && $entry != '.') {
                 $path = $dir . '/' . $entry;
@@ -50,6 +51,8 @@ class testController extends Controller
                         $ocr->image($path)->lang('eng')->allowlist(range('A', 'Z'), range('a', 'z'), ' ', '\n');
                         $text = $ocr->run();
                         $ret['title'] = $text;
+                        $write = "Title: " . $text . "\n";
+                        fwrite($fileOut, $write);
                     } catch (Exception $e) {
                         $ret['title'] = "Failed to scan";
                     }
@@ -61,6 +64,8 @@ class testController extends Controller
                         $ocr->image($path)->lang('eng')->allowlist(range(0, 9), '.');
                         $price = $ocr->run();
                         $ret['price'] = $price;
+                        $write = "Price: " . $price . "\n";
+                        fwrite($fileOut, $write);
                     } catch (Exception $e) {
                         $ret['price'] = "Failed to scan";
                     }
@@ -73,6 +78,8 @@ class testController extends Controller
                         $ocr->image($path)->lang('eng');
                         $desc = $ocr->run();
                         $ret['desc'] = $desc;
+                        $write = "Desc: " . $desc . "\n";
+                        fwrite($fileOut, $write);
                     } catch (Exception $e) {
                         $ret['desc'] = "Failed to scan";
                     }
@@ -80,6 +87,7 @@ class testController extends Controller
                 }
             }      
         }
+        fclose($fileOut);
         return view('info', $ret);
     }
 }
